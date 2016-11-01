@@ -38,7 +38,7 @@ var parseRawCommit = function(raw) {
 
   lines.forEach(function(line) {
     match = line.match(/(?:Closes|Fixes)\s#(\d+)/);
-    if (match) msg.closes.push(parseInt(match[1]));
+    if (match) msg.closes.push(parseInt(match[1], 10));
   });
 
   match = raw.match(/BREAKING CHANGE:([\s\S]*)/);
@@ -48,7 +48,7 @@ var parseRawCommit = function(raw) {
 
 
   msg.body = lines.join('\n');
-  match = msg.subject.match(/^(.*)\((.*)\)\:\s(.*)$/);
+  match = msg.subject.match(/^(.*)\((.*)\):\s(.*)$/);
 
   if (!match || !match[1] || !match[3]) {
     warn('Incorrect message: %s %s', msg.hash, msg.subject);
@@ -112,7 +112,7 @@ var printSection = function(stream, title, section, printCommitLinks) {
         }
         stream.write(')\n');
       } else {
-        stream.write(util.format('%s %s', prefix, commit.subject));
+        stream.write(util.format('%s %s\n', prefix, commit.subject));
       }
     });
   });
@@ -148,8 +148,6 @@ var writeChangelog = function(stream, commits, version) {
     breaks: {}
   };
 
-  sections.breaks[EMPTY_COMPONENT] = [];
-
   commits.forEach(function(commit) {
     var section = sections[commit.type];
     var component = commit.component || EMPTY_COMPONENT;
@@ -162,7 +160,7 @@ var writeChangelog = function(stream, commits, version) {
     if (commit.breaking) {
       sections.breaks[component] = sections.breaks[component] || [];
       sections.breaks[component].push({
-        subject: util.format("due to %s,\n %s", linkToCommit(commit.hash), commit.breaking),
+        subject: util.format('due to %s,\n %s', linkToCommit(commit.hash), commit.breaking),
         hash: commit.hash,
         closes: []
       });
@@ -188,6 +186,7 @@ var getPreviousTag = function() {
 
 
 var generate = function(version, file) {
+
   getPreviousTag().then(function(tag) {
     console.log('Reading git log since', tag);
     readGitLog('^fix|^feat|^perf|BREAKING', tag).then(function(commits) {
@@ -201,6 +200,7 @@ var generate = function(version, file) {
 
 // publish for testing
 exports.parseRawCommit = parseRawCommit;
+exports.printSection = printSection;
 
 // hacky start if not run by jasmine :-D
 if (process.argv.join('').indexOf('jasmine-node') === -1) {

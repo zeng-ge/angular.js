@@ -23,6 +23,15 @@ describe('ngStyle', function() {
   }));
 
 
+  it('should support lazy one-time binding for object literals', inject(function($rootScope, $compile) {
+    element = $compile('<div ng-style="::{height: heightStr}"></div>')($rootScope);
+    $rootScope.$digest();
+    expect(parseInt(element.css('height') + 0, 10)).toEqual(0); // height could be '' or '0px'
+    $rootScope.$apply('heightStr = "40px"');
+    expect(element.css('height')).toBe('40px');
+  }));
+
+
   describe('preserving styles set before and after compilation', function() {
     var scope, preCompStyle, preCompVal, postCompStyle, postCompVal, element;
 
@@ -33,7 +42,7 @@ describe('ngStyle', function() {
       postCompVal = '100px';
       element = jqLite('<div ng-style="styleObj"></div>');
       element.css(preCompStyle, preCompVal);
-      jqLite(document.body).append(element);
+      jqLite(window.document.body).append(element);
       $compile(element)($rootScope);
       scope = $rootScope;
       scope.styleObj = {'margin-top': '44px'};

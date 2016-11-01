@@ -26,12 +26,12 @@ machine:
 * [Git](http://git-scm.com/): The [Github Guide to
 Installing Git](https://help.github.com/articles/set-up-git) is a good source of information.
 
-* [Node.js](http://nodejs.org): We use Node to generate the documentation, run a
+* [Node.js v4.x](http://nodejs.org): We use Node to generate the documentation, run a
 development web server, run tests, and generate distributable files. Depending on your system, you can install Node either from source or as a
-pre-packaged bundle.
+pre-packaged bundle. (Currently our build does not work properly on Node v5 or greater - please use v4.x.)
 
 * [Java](http://www.java.com): We minify JavaScript using our
-[Closure Tools](https://developers.google.com/closure/) jar. Make sure you have Java (version 6 or higher) installed
+[Closure Tools](https://developers.google.com/closure/) jar. Make sure you have Java (version 7 or higher) installed
 and included in your [PATH](http://docs.oracle.com/javase/tutorial/essential/environment/paths.html) variable.
 
 * [Grunt](http://gruntjs.com): We use Grunt as our build system. Install the grunt command-line tool globally with:
@@ -39,15 +39,6 @@ and included in your [PATH](http://docs.oracle.com/javase/tutorial/essential/env
   ```shell
   npm install -g grunt-cli
   ```
-
-* [Bower](http://bower.io/): We use Bower to manage client-side packages for the docs. Install the `bower` command-line tool globally with:
-
-  ```shell
-  npm install -g bower
-  ```
-
-**Note:** You may need to use sudo (for OSX, *nix, BSD etc) or run your command shell as Administrator (for Windows) to install Grunt &amp;
-Bower globally.
 
 ## Forking Angular on Github
 
@@ -62,13 +53,13 @@ minified AngularJS files:
 
 ```shell
 # Clone your Github repository:
-git clone git@github.com:<github username>/angular.js.git
+git clone https://github.com/<github username>/angular.js.git
 
 # Go to the AngularJS directory:
 cd angular.js
 
 # Add the main AngularJS repository as an upstream remote to your repository:
-git remote add upstream https://github.com/angular/angular.js.git
+git remote add upstream "https://github.com/angular/angular.js.git"
 
 # Install node.js dependencies:
 npm install
@@ -126,13 +117,13 @@ made available a local web server based on Node.js.
    ```
 
 2. To access the local server, enter the following URL into your web browser:
-   ```
+   ```text
    http://localhost:8000/
    ```
    By default, it serves the contents of the AngularJS project directory.
 
 3. To access the locally served docs, visit this URL:
-   ```
+   ```text
    http://localhost:8000/build/docs/
    ```
 
@@ -148,12 +139,12 @@ grunt test:unit
 To run the tests on other browsers (Chrome, ChromeCanary, Firefox, Opera and Safari are pre-configured) use:
 
 ```shell
-grunt test:unit --browsers Opera,Firefox
+grunt test:unit --browsers=Opera,Firefox
 ```
 
 Note there should be _no spaces between browsers_. `Opera, Firefox` is INVALID.
 
-During development it's however more productive to continuously run unit tests every time the source or test files
+During development, however, it's more productive to continuously run unit tests every time the source or test files
 change. To execute tests in this mode run:
 
 1. To start the Karma server, capture Chrome browser and run unit tests, run:
@@ -165,7 +156,7 @@ change. To execute tests in this mode run:
 2. To capture more browsers, open this URL in the desired browser (URL might be different if you have multiple instance
    of Karma running, read Karma's console output for the correct URL):
 
-   ```shell
+   ```text
    http://localhost:9876/
    ```
 
